@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+import json
+import os
+import socket
+import fcntl
+import struct
+import sys
+import subprocess
+
+
+# From experience this is likely architecture specific (todo lookup
+# landscape client code for the same).
+# http://code.activestate.com/recipes/439094-get-the-ip-address-associated-with-a-network-inter/
+
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
+
+def get_flannel(path='/run/flannel/subnet.env'):
+    data = {'flannel_subnet': '', 'flannel_mtu': ""}
+    if not os.path.exists(path):
+        return data
+    with open(path) as fh:
+        data = dict([l.strip().lower().split('=') for l in fh.readlines()])
+    return data
+
+def main():
+    info = get_flannel()
+    conf = json.loads(subprocess.check_output(['config-get', '--format=json']))
+
+    if conf['container_type'] == 'lxc':
+        br_name = 'lxcbr0'
+    else:
+        br_name = 'docker0'
+
+    try:
+        br = get_ip_address(br_name)
+    except socket.error:
+        br = ""
+    status = "br:%s subnet:%s mtu:%s" % (
+        br, info['flannel_subnet'], info['flannel_mtu'])
+    if not info['flannel_subnet'].split('/')[0] == br:
+        sys.stdout.write("not-ready " + status)
+    else:
+        sys.stdout.write("ready " + status)
+
+
+if __name__ == '__main__':
+    main()

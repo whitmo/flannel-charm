@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -ex
+
+echo "Install flannel on $JUJU_UNIT_NAME"
+BIN_DIR=/usr/local/bin
+
+mkdir -p $BIN_DIR
+
+bzip2 -k -c -d $CHARM_DIR/files/flannel.amd64.bz2 > $BIN_DIR/flannel
+chmod +x-w $BIN_DIR/flannel
+
+apt-get install -qy bridge-utils

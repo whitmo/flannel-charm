@@ -1,0 +1,6 @@
+description "Flannel"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+exec /usr/local/bin/flannel -v=1 -ip-masq=true -etcd-endpoint=%(etcd_endpoint)s -logtostderr=true

@@ -1,0 +1,18 @@
+name: flannel
+summary: A soft overlay network
+description: |
+  A p2p tunneling overlay network for containers.
+
+  Rudder uses the Universal TUN/TAP device and creates an overlay
+  network using UDP to encapsulate IP packets. The subnet allocation
+  is done with the help of etcd which maintains the overlay to actual
+  IP mappings.
+provides:
+  network:
+    interface: overlay-network
+requires:
+  db:
+    interface: etcd
+peers:
+  overlay:
+    interface: flannel-mesh

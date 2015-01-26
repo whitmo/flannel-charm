@@ -1,0 +1,7 @@
+
+X - db relation changed shouldn't reconfigure if its the same data
+ - need to be able to add/remove etcd hosts, currently we attach the first one.
+ - change of etcd hosts, shouldn't cause lxc or docker reconfigure if the subnet the same.
+ - detect the docker change line so as to not cause multiple appends.
+X - detect the etcd initialization and avoid multiple attempts to set it [currently silent ignore]
+

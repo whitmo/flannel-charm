@@ -1,0 +1,13 @@
+options:
+  container_type:
+    default: lxc
+    type: string
+    description: |
+      Configure containers of type 'lxc' or 'docker'. Causes
+      installation of container type as a side-effect.
+  docker_origin:
+    default: upstream
+    type: string
+    description: |
+      Configure origin for docker package either 'distro' or
+      'upstream'.
