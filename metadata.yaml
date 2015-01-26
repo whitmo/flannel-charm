@@ -7,6 +7,14 @@ description: |
   network using UDP to encapsulate IP packets. The subnet allocation
   is done with the help of etcd which maintains the overlay to actual
   IP mappings.
+tags:
+  - networking
+  - sdn
+  - containers
+maintainers:
+  - "Whit Morriss <whit.morriss@canonical.com>"
+  - "Charles Butler <charles.butler@canonical.com>"
+  - "Matt Bruzek <matt.bruzek@canonical.com>"
 provides:
   network:
     interface: overlay-network
